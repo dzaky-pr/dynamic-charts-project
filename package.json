@@ -17,7 +17,7 @@
     "prepare": "husky install",
     "test": "echo \"Error: no test specified\" && exit 1",
     "typecheck": "tsc --noEmit",
-    "prepush": "pnpm lint && pnpm format && pnpm typecheck"
+    "prepush": "pnpm lint:write  && pnpm format:write && pnpm check:write && pnpm typecheck"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.32.0",
