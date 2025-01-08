@@ -6,13 +6,32 @@ import { CustomLineChartShadcn } from "@/components/shadcn-chart/LineChart";
 import { CustomPieChartShadcn } from "@/components/shadcn-chart/PieChart";
 import { CustomRadarChartShadcn } from "@/components/shadcn-chart/RadarChart";
 import { CustomRadialChartShadcn } from "@/components/shadcn-chart/RadialChart";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Table } from "@/components/ui/table";
+import { Textarea } from "@/components/ui/textarea";
 import { useEffect, useState } from "react";
 
 function MainChart() {
   const [data, setData] = useState<{ x: string; y: number }[]>([]);
+  const [openDialog, setOpenDialog] = useState(false);
   const [xValue, setXValue] = useState("");
   const [yValue, setYValue] = useState("");
-  const [chartType, setChartType] = useState("area-shadcn");
+  const [chartType, setChartType] = useState("");
   const [chartTitle, setChartTitle] = useState("");
   const [chartDesc, setChartDesc] = useState("");
   const [savedCharts, setSavedCharts] = useState<
@@ -23,6 +42,9 @@ function MainChart() {
       desc: string;
     }[]
   >([]);
+  const [editingChartIndex, setEditingChartIndex] = useState<number | null>(
+    null,
+  );
 
   useEffect(() => {
     const storedCharts = JSON.parse(
@@ -68,12 +90,24 @@ function MainChart() {
     setData([]);
     setChartTitle("");
     setChartDesc("");
+    setOpenDialog(false);
   };
 
   const handleDeleteChart = (index: number) => {
     const updatedCharts = savedCharts.filter((_, i) => i !== index);
     setSavedCharts(updatedCharts);
     localStorage.setItem("charts-shadcn", JSON.stringify(updatedCharts));
+  };
+
+  const handleEditData = (index: number) => {
+    const dataToEdit = data[index];
+    setXValue(dataToEdit.x);
+    setYValue(String(dataToEdit.y));
+  };
+
+  const handleDeleteData = (index: number) => {
+    const updatedData = data.filter((_, i) => i !== index);
+    setData(updatedData);
   };
 
   const renderChart = (
@@ -100,24 +134,20 @@ function MainChart() {
               chartDesc={chart.desc}
               xAxisKey="x"
             />
-            <button
-              onClick={() => handleDeleteChart(index)}
-              className="bg-red-500 text-white px-4 py-2 rounded mt-2"
-            >
-              Delete Chart
-            </button>
-            <button
-              onClick={() => handleEditChart(index)}
-              className="bg-yellow-500 text-white px-4 py-2 rounded mt-2"
-            >
-              Edit Chart
-            </button>
-            <button
-              onClick={() => handleUpdateChart(index)} // Add this
-              className="bg-blue-500 text-white px-4 py-2 rounded mt-2"
-            >
-              Update Chart
-            </button>
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                onClick={() => handleDeleteChart(index)}
+                className="bg-red-500 text-white px-4 py-2 rounded mt-2"
+              >
+                Delete Chart
+              </Button>
+              <Button
+                onClick={() => handleEditChart(index)}
+                className="bg-yellow-500 text-white px-4 py-2 rounded mt-2"
+              >
+                Edit Chart
+              </Button>
+            </div>
           </div>
         );
       case "bar-shadcn":
@@ -134,24 +164,20 @@ function MainChart() {
               chartTitle={chart.title}
               chartDesc={chart.desc}
             />
-            <button
-              onClick={() => handleDeleteChart(index)}
-              className="bg-red-500 text-white px-4 py-2 rounded mt-2"
-            >
-              Delete Chart
-            </button>
-            <button
-              onClick={() => handleEditChart(index)}
-              className="bg-yellow-500 text-white px-4 py-2 rounded mt-2"
-            >
-              Edit Chart
-            </button>
-            <button
-              onClick={() => handleUpdateChart(index)} // Add this
-              className="bg-blue-500 text-white px-4 py-2 rounded mt-2"
-            >
-              Update Chart
-            </button>
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                onClick={() => handleDeleteChart(index)}
+                className="bg-red-500 text-white px-4 py-2 rounded mt-2"
+              >
+                Delete Chart
+              </Button>
+              <Button
+                onClick={() => handleEditChart(index)}
+                className="bg-yellow-500 text-white px-4 py-2 rounded mt-2"
+              >
+                Edit Chart
+              </Button>
+            </div>
           </div>
         );
       case "pie-shadcn":
@@ -175,24 +201,20 @@ function MainChart() {
               chartTitle={chart.title}
               chartDesc={chart.desc}
             />
-            <button
-              onClick={() => handleDeleteChart(index)}
-              className="bg-red-500 text-white px-4 py-2 rounded mt-2"
-            >
-              Delete Chart
-            </button>
-            <button
-              onClick={() => handleEditChart(index)}
-              className="bg-yellow-500 text-white px-4 py-2 rounded mt-2"
-            >
-              Edit Chart
-            </button>
-            <button
-              onClick={() => handleUpdateChart(index)} // Add this
-              className="bg-blue-500 text-white px-4 py-2 rounded mt-2"
-            >
-              Update Chart
-            </button>
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                onClick={() => handleDeleteChart(index)}
+                className="bg-red-500 text-white px-4 py-2 rounded mt-2"
+              >
+                Delete Chart
+              </Button>
+              <Button
+                onClick={() => handleEditChart(index)}
+                className="bg-yellow-500 text-white px-4 py-2 rounded mt-2"
+              >
+                Edit Chart
+              </Button>
+            </div>
           </div>
         );
       case "area-shadcn":
@@ -209,24 +231,20 @@ function MainChart() {
               chartTitle={chart.title}
               chartDesc={chart.desc}
             />
-            <button
-              onClick={() => handleDeleteChart(index)}
-              className="bg-red-500 text-white px-4 py-2 rounded mt-2"
-            >
-              Delete Chart
-            </button>
-            <button
-              onClick={() => handleEditChart(index)}
-              className="bg-yellow-500 text-white px-4 py-2 rounded mt-2"
-            >
-              Edit Chart
-            </button>
-            <button
-              onClick={() => handleUpdateChart(index)} // Add this
-              className="bg-blue-500 text-white px-4 py-2 rounded mt-2"
-            >
-              Update Chart
-            </button>
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                onClick={() => handleDeleteChart(index)}
+                className="bg-red-500 text-white px-4 py-2 rounded mt-2"
+              >
+                Delete Chart
+              </Button>
+              <Button
+                onClick={() => handleEditChart(index)}
+                className="bg-yellow-500 text-white px-4 py-2 rounded mt-2"
+              >
+                Edit Chart
+              </Button>
+            </div>
           </div>
         );
       case "radar-shadcn":
@@ -243,24 +261,20 @@ function MainChart() {
               chartTitle={chart.title}
               chartDesc={chart.desc}
             />
-            <button
-              onClick={() => handleDeleteChart(index)}
-              className="bg-red-500 text-white px-4 py-2 rounded mt-2"
-            >
-              Delete Chart
-            </button>
-            <button
-              onClick={() => handleEditChart(index)}
-              className="bg-yellow-500 text-white px-4 py-2 rounded mt-2"
-            >
-              Edit Chart
-            </button>
-            <button
-              onClick={() => handleUpdateChart(index)} // Add this
-              className="bg-blue-500 text-white px-4 py-2 rounded mt-2"
-            >
-              Update Chart
-            </button>
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                onClick={() => handleDeleteChart(index)}
+                className="bg-red-500 text-white px-4 py-2 rounded mt-2"
+              >
+                Delete Chart
+              </Button>
+              <Button
+                onClick={() => handleEditChart(index)}
+                className="bg-yellow-500 text-white px-4 py-2 rounded mt-2"
+              >
+                Edit Chart
+              </Button>
+            </div>
           </div>
         );
       case "radial-shadcn":
@@ -270,13 +284,13 @@ function MainChart() {
               chartData={chart.data.map(({ x, y }, i) => ({
                 name: x,
                 value: y,
-                fill: `hsl(var(--chart-${i + 1}))`, // Penerapan warna dinamis berdasarkan indeks
+                fill: `hsl(var(--chart-${i + 1}))`,
               }))}
               chartConfig={{
                 value: {
                   label: "Value",
                   color: `hsl(var(--chart-${index + 1}))`,
-                }, // Sesuaikan warna berdasarkan index
+                },
               }}
               dataKey="value"
               nameKey="name"
@@ -284,25 +298,21 @@ function MainChart() {
               chartDesc={chart.desc}
               showLabels
             />
-            <button
-              onClick={() => handleDeleteChart(index)}
-              className="bg-red-500 text-white px-4 py-2 rounded mt-2"
-            >
-              Delete Chart
-            </button>
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                onClick={() => handleDeleteChart(index)}
+                className="bg-red-500 text-white px-4 py-2 rounded mt-2"
+              >
+                Delete Chart
+              </Button>
 
-            <button
-              onClick={() => handleEditChart(index)}
-              className="bg-yellow-500 text-white px-4 py-2 rounded mt-2"
-            >
-              Edit Chart
-            </button>
-            <button
-              onClick={() => handleUpdateChart(index)} // Add this
-              className="bg-blue-500 text-white px-4 py-2 rounded mt-2"
-            >
-              Update Chart
-            </button>
+              <Button
+                onClick={() => handleEditChart(index)}
+                className="bg-yellow-500 text-white px-4 py-2 rounded mt-2"
+              >
+                Edit Chart
+              </Button>
+            </div>
           </div>
         );
       default:
@@ -316,6 +326,8 @@ function MainChart() {
     setChartTitle(chartToEdit.title);
     setChartDesc(chartToEdit.desc);
     setChartType(chartToEdit.type);
+    setEditingChartIndex(index);
+    setOpenDialog(true);
   };
 
   const handleUpdateChart = (index: number) => {
@@ -341,100 +353,288 @@ function MainChart() {
     setSavedCharts(updatedCharts);
     localStorage.setItem("charts-shadcn", JSON.stringify(updatedCharts));
 
-    // Clear form after update
     setData([]);
     setChartTitle("");
     setChartDesc("");
     setChartType("area-shadcn");
+    setEditingChartIndex(null);
+    setOpenDialog(false);
+  };
+
+  const handleDialogClose = () => setOpenDialog(false);
+  const handleDialogOpen = () => {
+    setData([]);
+    setChartTitle("");
+    setChartDesc("");
+    setChartType("");
+    setEditingChartIndex(null);
+    setOpenDialog(true);
   };
 
   return (
     <div className="grid grid-cols-1 bg-white lg:grid-cols-1 gap-6 p-4">
-      <h1 className="text-2xl font-bold">Main Chart</h1>
-      <div className="mt-4">
-        <h2 className="font-semibold">Add Data</h2>
-        <div className="flex gap-2">
-          <input
+      <h1 className="text-2xl font-bold">Shadcn Chart Playground</h1>
+
+      <Button onClick={handleDialogOpen}>Add Chart</Button>
+
+      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+        <DialogTrigger />
+        <DialogContent className="overflow-auto">
+          <div className="mt-4">
+            <div className="space-y-4">
+              <div className="grid w-full items-center gap-1.5">
+                <Label htmlFor="chartTitle">Chart Title</Label>
+                <Input
+                  type="text"
+                  id="chartTitle"
+                  placeholder="Chart Title"
+                  value={chartTitle}
+                  onChange={(e) => setChartTitle(e.target.value)}
+                  className="w-full"
+                />
+              </div>
+              <div className="grid w-full items-center gap-1.5">
+                <Label htmlFor="chartDesc">Chart Description</Label>
+                <Textarea
+                  placeholder="Chart Description"
+                  value={chartDesc}
+                  onChange={(e) => setChartDesc(e.target.value)}
+                  className="w-full"
+                  id="chartDesc"
+                />
+              </div>
+
+              <div className="grid w-full items-center gap-1.5">
+                <Label htmlFor="chartType">Chart Type</Label>
+                <Select
+                  value={chartType}
+                  onValueChange={(value) => setChartType(value)}
+                >
+                  <SelectTrigger id="chartType" className="w-full">
+                    <SelectValue placeholder="Select Chart Type..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="area-shadcn">Area Chart</SelectItem>
+                    <SelectItem value="bar-shadcn">Bar Chart</SelectItem>
+                    <SelectItem value="line-shadcn">Line Chart</SelectItem>
+                    <SelectItem value="pie-shadcn">Pie Chart (Bug)</SelectItem>
+                    <SelectItem value="radar-shadcn">Radar Chart</SelectItem>
+                    <SelectItem value="radial-shadcn">
+                      Radial Chart (Bug)
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 gap-4 items-end">
+            <div className="grid w-full items-center gap-1.5">
+              <Label htmlFor="xDataVal">Add X Data Value </Label>
+              <Input
+                id="xDataVal"
+                type="text"
+                placeholder="X Value"
+                value={xValue}
+                onChange={(e) => setXValue(e.target.value)}
+                className="flex-1"
+              />
+            </div>
+            <div className="grid w-full items-center gap-1.5">
+              <Label htmlFor="yDataVal">Add Y Data Value </Label>
+              <Input
+                id="yDataVal"
+                type="number"
+                placeholder="Y Value"
+                value={yValue}
+                onChange={(e) => setYValue(e.target.value)}
+                className="flex-1"
+              />
+            </div>
+            <Button onClick={handleAddData} className="flex-shrink-0">
+              Add
+            </Button>
+          </div>
+
+          <div className="mt-4">
+            <h2 className="font-semibold">Current Data</h2>
+            {data.length > 0 ? (
+              <Table className="w-full mt-2 border-collapse">
+                <thead>
+                  <tr>
+                    <th className="border p-2">X Value</th>
+                    <th className="border p-2">Y Value</th>
+                    <th className="border p-2">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.map((d, index) => (
+                    <tr key={index}>
+                      <td className="border p-2">{d.x}</td>
+                      <td className="border p-2">{d.y}</td>
+                      <td className="border p-2 flex gap-2">
+                        <Button
+                          onClick={() => handleEditData(index)}
+                          className="bg-yellow-500 text-white px-4 py-2 rounded"
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          onClick={() => handleDeleteData(index)}
+                          className="bg-red-500 text-white px-4 py-2 rounded"
+                        >
+                          Delete
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            ) : (
+              <p>No data added yet.</p>
+            )}
+          </div>
+
+          <DialogFooter>
+            <Button onClick={handleDialogClose}>Cancel</Button>
+            <Button
+              onClick={
+                editingChartIndex !== null
+                  ? () => handleUpdateChart(editingChartIndex)
+                  : handleSaveChart
+              }
+            >
+              {editingChartIndex !== null ? "Update Chart" : "Create Chart"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* <div className="mt-4">
+        <div className="space-y-4">
+          <div className="grid w-full items-center gap-1.5">
+            <Label htmlFor="chartTitle">Chart Title</Label>
+            <Input
+              type="text"
+              id="chartTitle"
+              placeholder="Chart Title"
+              value={chartTitle}
+              onChange={(e) => setChartTitle(e.target.value)}
+              className="w-full"
+            />
+          </div>
+          <div className="grid w-full items-center gap-1.5">
+            <Label htmlFor="chartDesc">Chart Description</Label>
+            <Textarea
+              placeholder="Chart Description"
+              value={chartDesc}
+              onChange={(e) => setChartDesc(e.target.value)}
+              className="w-full"
+              id="chartDesc"
+            />
+          </div>
+
+          <div className="grid w-full items-center gap-1.5">
+            <Label htmlFor="chartType">Chart Type</Label>
+            <Select
+              value={chartType}
+              onValueChange={(value) => setChartType(value)}
+            >
+              <SelectTrigger id="chartType" className="w-full">
+                <SelectValue placeholder="Select Chart Type..." />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="area-shadcn">Area Chart</SelectItem>
+                <SelectItem value="bar-shadcn">Bar Chart</SelectItem>
+                <SelectItem value="line-shadcn">Line Chart</SelectItem>
+                <SelectItem value="pie-shadcn">Pie Chart (Bug)</SelectItem>
+                <SelectItem value="radar-shadcn">Radar Chart</SelectItem>
+                <SelectItem value="radial-shadcn">
+                  Radial Chart (Bug)
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-3 gap-4 items-end">
+        <div className="grid w-full items-center gap-1.5">
+          <Label htmlFor="xDataVal">Add X Data Value </Label>
+          <Input
+            id="xDataVal"
             type="text"
             placeholder="X Value"
             value={xValue}
             onChange={(e) => setXValue(e.target.value)}
-            className="border p-2 rounded"
+            className="flex-1"
           />
-          <input
+        </div>
+        <div className="grid w-full items-center gap-1.5">
+          <Label htmlFor="yDataVal">Add Y Data Value </Label>
+          <Input
+            id="yDataVal"
             type="number"
             placeholder="Y Value"
             value={yValue}
             onChange={(e) => setYValue(e.target.value)}
-            className="border p-2 rounded"
+            className="flex-1"
           />
-          <button
-            onClick={handleAddData}
-            className="bg-blue-500 text-white px-4 py-2 rounded"
-          >
-            Add
-          </button>
         </div>
+        <Button onClick={handleAddData} className="flex-shrink-0">
+          Add
+        </Button>
       </div>
 
       <div className="mt-4">
         <h2 className="font-semibold">Current Data</h2>
         {data.length > 0 ? (
-          <table className="border-collapse border border-gray-400 w-full">
+          <Table className="w-full mt-2 border-collapse">
             <thead>
               <tr>
-                <th className="border border-gray-300 p-2">X Value</th>
-                <th className="border border-gray-300 p-2">Y Value</th>
+                <th className="border p-2">X Value</th>
+                <th className="border p-2">Y Value</th>
+                <th className="border p-2">Actions</th>
               </tr>
             </thead>
             <tbody>
               {data.map((d, index) => (
                 <tr key={index}>
-                  <td className="border border-gray-300 p-2">{d.x}</td>
-                  <td className="border border-gray-300 p-2">{d.y}</td>
+                  <td className="border p-2">{d.x}</td>
+                  <td className="border p-2">{d.y}</td>
+                  <td className="border p-2 flex gap-2">
+                    <Button
+                      onClick={() => handleEditData(index)}
+                      className="bg-yellow-500 text-white px-4 py-2 rounded"
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      onClick={() => handleDeleteData(index)}
+                      className="bg-red-500 text-white px-4 py-2 rounded"
+                    >
+                      Delete
+                    </Button>
+                  </td>
                 </tr>
               ))}
             </tbody>
-          </table>
+          </Table>
         ) : (
           <p>No data added yet.</p>
         )}
-      </div>
 
-      <div className="mt-4">
-        <h2 className="font-semibold">Chart Details</h2>
-        <input
-          type="text"
-          placeholder="Chart Title"
-          value={chartTitle}
-          onChange={(e) => setChartTitle(e.target.value)}
-          className="border p-2 rounded w-full"
-        />
-        <textarea
-          placeholder="Chart Description"
-          value={chartDesc}
-          onChange={(e) => setChartDesc(e.target.value)}
-          className="border p-2 rounded w-full mt-2"
-        />
-        <select
-          value={chartType}
-          onChange={(e) => setChartType(e.target.value)}
-          className="border p-2 rounded mt-2"
+        <Button
+          onClick={
+            editingChartIndex !== null
+              ? () => handleUpdateChart(editingChartIndex)
+              : handleSaveChart
+          }
+          className="mt-2"
         >
-          <option value="area-shadcn">Area Chart</option>
-          <option value="bar-shadcn">Bar Chart</option>
-          <option value="line-shadcn">Line Chart</option>
-          <option value="pie-shadcn">Pie Chart</option>
-          <option value="radar-shadcn">Radar Chart</option>
-          <option value="radial-shadcn">Radial Chart</option>
-        </select>
-        <button
-          onClick={handleSaveChart}
-          className="bg-green-500 text-white px-4 py-2 rounded mt-2"
-        >
-          Create Chart
-        </button>
-      </div>
+          {editingChartIndex !== null ? "Update Chart" : "Create Chart"}
+        </Button>
+      </div> */}
 
       <div className="mt-4">
         <h2 className="font-semibold">Saved Charts</h2>

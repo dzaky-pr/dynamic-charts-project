@@ -4,7 +4,7 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
+  // CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -16,7 +16,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { TrendingUp } from "lucide-react";
+// import { TrendingUp } from "lucide-react";
 import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts";
 
 type CustomRadarChartProps = {
@@ -73,14 +73,14 @@ export function CustomRadarChartShadcn({
           </RadarChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex-col gap-2 pt-4 text-sm">
+      {/* <CardFooter className="flex-col gap-2 pt-4 text-sm">
         <div className="flex items-center gap-2 font-medium leading-none">
           Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
         </div>
         <div className="flex items-center gap-2 leading-none text-muted-foreground">
           January - June 2024
         </div>
-      </CardFooter>
+      </CardFooter> */}
     </Card>
   );
 }
