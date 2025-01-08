@@ -7,12 +7,7 @@ import { CustomPieChartShadcn } from "@/components/shadcn-chart/PieChart";
 import { CustomRadarChartShadcn } from "@/components/shadcn-chart/RadarChart";
 import { CustomRadialChartShadcn } from "@/components/shadcn-chart/RadialChart";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -22,13 +17,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Table } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 import { useEffect, useState } from "react";
 
 function MainChart() {
   const [data, setData] = useState<{ x: string; y: number }[]>([]);
-  const [openDialog, setOpenDialog] = useState(false);
+  const [openSheet, setOpenSheet] = useState(false);
   const [xValue, setXValue] = useState("");
   const [yValue, setYValue] = useState("");
   const [chartType, setChartType] = useState("");
@@ -90,19 +95,13 @@ function MainChart() {
     setData([]);
     setChartTitle("");
     setChartDesc("");
-    setOpenDialog(false);
+    setOpenSheet(false);
   };
 
   const handleDeleteChart = (index: number) => {
     const updatedCharts = savedCharts.filter((_, i) => i !== index);
     setSavedCharts(updatedCharts);
     localStorage.setItem("charts-shadcn", JSON.stringify(updatedCharts));
-  };
-
-  const handleEditData = (index: number) => {
-    const dataToEdit = data[index];
-    setXValue(dataToEdit.x);
-    setYValue(String(dataToEdit.y));
   };
 
   const handleDeleteData = (index: number) => {
@@ -327,7 +326,7 @@ function MainChart() {
     setChartDesc(chartToEdit.desc);
     setChartType(chartToEdit.type);
     setEditingChartIndex(index);
-    setOpenDialog(true);
+    setOpenSheet(true);
   };
 
   const handleUpdateChart = (index: number) => {
@@ -358,28 +357,38 @@ function MainChart() {
     setChartDesc("");
     setChartType("area-shadcn");
     setEditingChartIndex(null);
-    setOpenDialog(false);
+    setOpenSheet(false);
   };
 
-  const handleDialogClose = () => setOpenDialog(false);
-  const handleDialogOpen = () => {
+  const handleSheetOpen = () => {
     setData([]);
     setChartTitle("");
     setChartDesc("");
     setChartType("");
     setEditingChartIndex(null);
-    setOpenDialog(true);
+    setOpenSheet(true);
   };
 
   return (
     <div className="grid grid-cols-1 bg-white lg:grid-cols-1 gap-6 p-4">
       <h1 className="text-2xl font-bold">Shadcn Chart Playground</h1>
 
-      <Button onClick={handleDialogOpen}>Add Chart</Button>
+      <Button onClick={handleSheetOpen}>Add Chart</Button>
 
-      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-        <DialogTrigger />
-        <DialogContent className="overflow-auto">
+      <Sheet open={openSheet} onOpenChange={setOpenSheet}>
+        <SheetTrigger asChild />
+        <SheetContent style={{ maxWidth: "100vw", overflowY: "auto" }}>
+          <SheetHeader>
+            <SheetTitle>
+              {editingChartIndex !== null ? "Edit Chart" : "Create Chart"}
+            </SheetTitle>
+            <SheetDescription>
+              {editingChartIndex !== null
+                ? "Edit the chart details and update the data."
+                : "Add a new chart with the necessary data."}
+            </SheetDescription>
+          </SheetHeader>
+
           <div className="mt-4">
             <div className="space-y-4">
               <div className="grid w-full items-center gap-1.5">
@@ -425,216 +434,86 @@ function MainChart() {
                   </SelectContent>
                 </Select>
               </div>
+
+              <div className="grid grid-cols-3 gap-4 items-end">
+                <div className="grid w-full items-center gap-1.5">
+                  <Label htmlFor="xDataVal">Add X Data Value </Label>
+                  <Input
+                    id="xDataVal"
+                    type="text"
+                    placeholder="X Value"
+                    value={xValue}
+                    onChange={(e) => setXValue(e.target.value)}
+                    className="flex-1"
+                  />
+                </div>
+                <div className="grid w-full items-center gap-1.5">
+                  <Label htmlFor="yDataVal">Add Y Data Value </Label>
+                  <Input
+                    id="yDataVal"
+                    type="number"
+                    placeholder="Y Value"
+                    value={yValue}
+                    onChange={(e) => setYValue(e.target.value)}
+                    className="flex-1"
+                  />
+                </div>
+                <Button onClick={handleAddData} className="flex-shrink-0">
+                  Add
+                </Button>
+              </div>
+
+              <div className="mt-4">
+                <h2 className="font-semibold">Current Data</h2>
+                {data.length > 0 ? (
+                  <Table className="w-full mt-2 border-collapse">
+                    <thead>
+                      <tr>
+                        <th className="border p-2">X Value</th>
+                        <th className="border p-2">Y Value</th>
+                        <th className="border p-2">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {data.map((d, index) => (
+                        <tr key={index}>
+                          <td className="border p-2">{d.x}</td>
+                          <td className="border p-2">{d.y}</td>
+                          <td className="border p-2  items-center justify-center flex">
+                            <Button
+                              onClick={() => handleDeleteData(index)}
+                              className="bg-red-500 text-white px-4 py-2 rounded"
+                            >
+                              Delete
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                ) : (
+                  <p>No data added yet.</p>
+                )}
+              </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-4 items-end">
-            <div className="grid w-full items-center gap-1.5">
-              <Label htmlFor="xDataVal">Add X Data Value </Label>
-              <Input
-                id="xDataVal"
-                type="text"
-                placeholder="X Value"
-                value={xValue}
-                onChange={(e) => setXValue(e.target.value)}
-                className="flex-1"
-              />
-            </div>
-            <div className="grid w-full items-center gap-1.5">
-              <Label htmlFor="yDataVal">Add Y Data Value </Label>
-              <Input
-                id="yDataVal"
-                type="number"
-                placeholder="Y Value"
-                value={yValue}
-                onChange={(e) => setYValue(e.target.value)}
-                className="flex-1"
-              />
-            </div>
-            <Button onClick={handleAddData} className="flex-shrink-0">
-              Add
-            </Button>
-          </div>
-
-          <div className="mt-4">
-            <h2 className="font-semibold">Current Data</h2>
-            {data.length > 0 ? (
-              <Table className="w-full mt-2 border-collapse">
-                <thead>
-                  <tr>
-                    <th className="border p-2">X Value</th>
-                    <th className="border p-2">Y Value</th>
-                    <th className="border p-2">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.map((d, index) => (
-                    <tr key={index}>
-                      <td className="border p-2">{d.x}</td>
-                      <td className="border p-2">{d.y}</td>
-                      <td className="border p-2 flex gap-2">
-                        <Button
-                          onClick={() => handleEditData(index)}
-                          className="bg-yellow-500 text-white px-4 py-2 rounded"
-                        >
-                          Edit
-                        </Button>
-                        <Button
-                          onClick={() => handleDeleteData(index)}
-                          className="bg-red-500 text-white px-4 py-2 rounded"
-                        >
-                          Delete
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-            ) : (
-              <p>No data added yet.</p>
-            )}
-          </div>
-
-          <DialogFooter>
-            <Button onClick={handleDialogClose}>Cancel</Button>
-            <Button
-              onClick={
-                editingChartIndex !== null
-                  ? () => handleUpdateChart(editingChartIndex)
-                  : handleSaveChart
-              }
-            >
-              {editingChartIndex !== null ? "Update Chart" : "Create Chart"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* <div className="mt-4">
-        <div className="space-y-4">
-          <div className="grid w-full items-center gap-1.5">
-            <Label htmlFor="chartTitle">Chart Title</Label>
-            <Input
-              type="text"
-              id="chartTitle"
-              placeholder="Chart Title"
-              value={chartTitle}
-              onChange={(e) => setChartTitle(e.target.value)}
-              className="w-full"
-            />
-          </div>
-          <div className="grid w-full items-center gap-1.5">
-            <Label htmlFor="chartDesc">Chart Description</Label>
-            <Textarea
-              placeholder="Chart Description"
-              value={chartDesc}
-              onChange={(e) => setChartDesc(e.target.value)}
-              className="w-full"
-              id="chartDesc"
-            />
-          </div>
-
-          <div className="grid w-full items-center gap-1.5">
-            <Label htmlFor="chartType">Chart Type</Label>
-            <Select
-              value={chartType}
-              onValueChange={(value) => setChartType(value)}
-            >
-              <SelectTrigger id="chartType" className="w-full">
-                <SelectValue placeholder="Select Chart Type..." />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="area-shadcn">Area Chart</SelectItem>
-                <SelectItem value="bar-shadcn">Bar Chart</SelectItem>
-                <SelectItem value="line-shadcn">Line Chart</SelectItem>
-                <SelectItem value="pie-shadcn">Pie Chart (Bug)</SelectItem>
-                <SelectItem value="radar-shadcn">Radar Chart</SelectItem>
-                <SelectItem value="radial-shadcn">
-                  Radial Chart (Bug)
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-3 gap-4 items-end">
-        <div className="grid w-full items-center gap-1.5">
-          <Label htmlFor="xDataVal">Add X Data Value </Label>
-          <Input
-            id="xDataVal"
-            type="text"
-            placeholder="X Value"
-            value={xValue}
-            onChange={(e) => setXValue(e.target.value)}
-            className="flex-1"
-          />
-        </div>
-        <div className="grid w-full items-center gap-1.5">
-          <Label htmlFor="yDataVal">Add Y Data Value </Label>
-          <Input
-            id="yDataVal"
-            type="number"
-            placeholder="Y Value"
-            value={yValue}
-            onChange={(e) => setYValue(e.target.value)}
-            className="flex-1"
-          />
-        </div>
-        <Button onClick={handleAddData} className="flex-shrink-0">
-          Add
-        </Button>
-      </div>
-
-      <div className="mt-4">
-        <h2 className="font-semibold">Current Data</h2>
-        {data.length > 0 ? (
-          <Table className="w-full mt-2 border-collapse">
-            <thead>
-              <tr>
-                <th className="border p-2">X Value</th>
-                <th className="border p-2">Y Value</th>
-                <th className="border p-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((d, index) => (
-                <tr key={index}>
-                  <td className="border p-2">{d.x}</td>
-                  <td className="border p-2">{d.y}</td>
-                  <td className="border p-2 flex gap-2">
-                    <Button
-                      onClick={() => handleEditData(index)}
-                      className="bg-yellow-500 text-white px-4 py-2 rounded"
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      onClick={() => handleDeleteData(index)}
-                      className="bg-red-500 text-white px-4 py-2 rounded"
-                    >
-                      Delete
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        ) : (
-          <p>No data added yet.</p>
-        )}
-
-        <Button
-          onClick={
-            editingChartIndex !== null
-              ? () => handleUpdateChart(editingChartIndex)
-              : handleSaveChart
-          }
-          className="mt-2"
-        >
-          {editingChartIndex !== null ? "Update Chart" : "Create Chart"}
-        </Button>
-      </div> */}
+          <SheetFooter>
+            <SheetClose asChild>
+              <Button
+                onClick={() =>
+                  editingChartIndex !== null
+                    ? handleUpdateChart(editingChartIndex)
+                    : handleSaveChart()
+                }
+                className="mt-6"
+              >
+                {editingChartIndex !== null ? "Update Chart" : "Create Chart"}
+              </Button>
+            </SheetClose>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
 
       <div className="mt-4">
         <h2 className="font-semibold">Saved Charts</h2>
