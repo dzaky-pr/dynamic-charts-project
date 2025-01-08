@@ -25,21 +25,25 @@ type CustomRadarChartProps = {
   chartConfig: ChartConfig;
   showLegend?: boolean;
   showDots?: boolean;
+  dataKey: string;
+  chartTitle: string;
+  chartDesc: string;
 };
 
-export function CustomRadarChart({
+export function CustomRadarChartShadcn({
   chartData,
   chartConfig,
   showLegend = false,
   showDots = false,
+  dataKey,
+  chartTitle,
+  chartDesc,
 }: CustomRadarChartProps) {
   return (
     <Card>
       <CardHeader className="items-center pb-4">
-        <CardTitle>Radar Chart</CardTitle>
-        <CardDescription>
-          Showing total visitors for the last 6 months
-        </CardDescription>
+        <CardTitle>{chartTitle}</CardTitle>
+        <CardDescription>{chartDesc}</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer
@@ -51,7 +55,7 @@ export function CustomRadarChart({
               cursor={false}
               content={<ChartTooltipContent indicator="line" />}
             />
-            <PolarAngleAxis dataKey="month" />
+            <PolarAngleAxis dataKey={dataKey} />
             <PolarGrid />
             {Object.keys(chartConfig).map((key) => (
               <Radar

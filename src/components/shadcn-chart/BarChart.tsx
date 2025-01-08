@@ -16,66 +16,70 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { TrendingUp } from "lucide-react";
-import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
-interface CustomLineChartProps {
-  chartType?: "linear" | "step" | "monotone" | "natural";
+interface CustomBarChartProps {
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   data: Array<Record<string, any>>;
   chartConfig: Record<string, { label: string; color: string }>;
-  showDots?: boolean;
-  title: string;
-  description: string;
+  layout?: "horizontal" | "vertical"; // Default "horizontal"
   showLegend?: boolean;
+  axisKey: string;
+  chartTitle: string;
+  chartDesc: string;
 }
 
-export function CustomLineChart({
+export function CustomBarChartShadcn({
   data,
   chartConfig,
-  chartType = "linear",
-  showDots = false,
-  title,
-  description,
+  layout = "horizontal",
   showLegend = false,
-}: CustomLineChartProps) {
+  axisKey,
+  chartTitle,
+  chartDesc,
+}: CustomBarChartProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
+        <CardTitle>{chartTitle}</CardTitle>
+        <CardDescription>{chartDesc}</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <LineChart
-            accessibilityLayer
-            data={data} // Using data from props instead of chartData
-            margin={{
-              left: 12,
-              right: 12,
-            }}
+          <BarChart
+            data={data}
+            layout={layout}
+            margin={{ top: 16, right: 16, bottom: 16, left: 16 }}
           >
-            <CartesianGrid vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" />
             <XAxis
-              dataKey="month"
+              dataKey={layout === "horizontal" ? axisKey : undefined}
+              type={layout === "horizontal" ? "category" : "number"}
               tickLine={false}
               axisLine={false}
-              tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
+              tickMargin={10}
             />
-            <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+            <YAxis
+              type={layout === "horizontal" ? "number" : "category"}
+              dataKey={layout === "horizontal" ? undefined : axisKey}
+              tickLine={false}
+              axisLine={false}
+              tickMargin={10}
+            />
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent indicator="line" />}
+            />
             {showLegend && <ChartLegend content={<ChartLegendContent />} />}
             {Object.keys(chartConfig).map((key) => (
-              <Line
+              <Bar
                 key={key}
                 dataKey={key}
-                type={chartType}
-                stroke={chartConfig[key].color}
-                strokeWidth={2}
-                dot={showDots ? { fill: chartConfig[key].color } : false}
-                activeDot={showDots ? { r: 6 } : undefined}
+                fill={chartConfig[key].color}
+                radius={layout === "horizontal" ? [4, 4, 0, 0] : [0, 4, 4, 0]}
               />
             ))}
-          </LineChart>
+          </BarChart>
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">

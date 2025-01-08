@@ -24,21 +24,29 @@ type CustomPieChartProps = {
   chartType: "pie" | "donut";
   showLegend?: boolean;
   showLabel?: boolean;
+  dataKey: string;
+  nameKey: string;
+  chartTitle: string;
+  chartDesc: string;
 };
 
-export function CustomPieChart({
+export function CustomPieChartShadcn({
   chartData,
   chartConfig,
   chartType,
   showLegend = false,
   showLabel = false,
+  dataKey,
+  nameKey,
+  chartTitle,
+  chartDesc,
 }: CustomPieChartProps) {
   const renderPieChart = () => {
     return (
       <PieChart>
         {showLegend && (
           <ChartLegend
-            content={<ChartLegendContent nameKey="browser" />}
+            content={<ChartLegendContent nameKey={nameKey} />}
             className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center"
           />
         )}
@@ -47,8 +55,8 @@ export function CustomPieChart({
 
         <Pie
           data={chartData}
-          dataKey="visitors"
-          nameKey="browser"
+          dataKey={dataKey}
+          nameKey={nameKey}
           innerRadius={chartType === "donut" ? 60 : 0}
           label={showLabel ? true : false}
         />
@@ -59,8 +67,8 @@ export function CustomPieChart({
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Pie Chart {chartType === "donut" ? "Donut" : ""}</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>{chartTitle}</CardTitle>
+        <CardDescription>{chartDesc}</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer

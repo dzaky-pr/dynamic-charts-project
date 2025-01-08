@@ -1,7 +1,7 @@
 "use client";
 
 import { TrendingUp } from "lucide-react";
-import { PolarGrid, RadialBar, RadialBarChart } from "recharts";
+import { LabelList, PolarGrid, RadialBar, RadialBarChart } from "recharts";
 
 import {
   Card,
@@ -14,8 +14,6 @@ import {
 import {
   ChartConfig,
   ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
@@ -24,19 +22,27 @@ type CustomRadialChartProps = {
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   chartData: Array<Record<string, any>>;
   chartConfig: ChartConfig;
-  showLegend?: boolean;
+  dataKey: string;
+  nameKey: string;
+  chartTitle: string;
+  chartDesc: string;
+  showLabels?: boolean;
 };
 
-export function CustomRadialChart({
+export function CustomRadialChartShadcn({
   chartData,
   chartConfig,
-  showLegend = false,
+  dataKey,
+  nameKey,
+  chartTitle,
+  chartDesc,
+  showLabels = false,
 }: CustomRadialChartProps) {
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Radial Chart - Grid</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>{chartTitle}</CardTitle>
+        <CardDescription>{chartDesc}</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
@@ -46,14 +52,20 @@ export function CustomRadialChart({
           <RadialBarChart data={chartData} innerRadius={30} outerRadius={100}>
             <ChartTooltip
               cursor={false}
-              content={<ChartTooltipContent hideLabel nameKey="browser" />}
+              content={<ChartTooltipContent hideLabel nameKey={nameKey} />}
             />
             <PolarGrid gridType="circle" />
-            <RadialBar dataKey="visitors" />
 
-            {showLegend && (
-              <ChartLegend className="mt-8" content={<ChartLegendContent />} />
-            )}
+            <RadialBar dataKey={dataKey} background>
+              {showLabels && (
+                <LabelList
+                  position="insideStart"
+                  dataKey="browser"
+                  className="fill-white capitalize mix-blend-luminosity"
+                  fontSize={11}
+                />
+              )}
+            </RadialBar>
           </RadialBarChart>
         </ChartContainer>
       </CardContent>
