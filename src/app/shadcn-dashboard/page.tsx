@@ -355,7 +355,7 @@ function MainChart() {
     setData([]);
     setChartTitle("");
     setChartDesc("");
-    setChartType("area-shadcn");
+    setChartType("");
     setEditingChartIndex(null);
     setOpenSheet(false);
   };

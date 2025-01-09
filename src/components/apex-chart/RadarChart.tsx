@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 interface CustomRadarChartApexProps {
-  options: ApexCharts.ApexOptions; // Import proper types from ApexCharts if available
+  options: ApexCharts.ApexOptions;
   series: Array<{
     name: string;
     data: number[];

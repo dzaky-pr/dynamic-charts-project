@@ -5,11 +5,8 @@ import dynamic from "next/dynamic";
 const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 interface CustomPolarChartApexProps {
-  options: ApexCharts.ApexOptions; // Import proper types from ApexCharts if available
-  series: Array<{
-    name: string;
-    data: number[];
-  }>;
+  options: ApexCharts.ApexOptions;
+  series: number[];
   height?: number;
   width?: number;
 }
@@ -20,6 +17,33 @@ export function CustomPolarChartApex({
   height = 400,
   width = 500,
 }: CustomPolarChartApexProps) {
+  // const options = {
+  //   title: {
+  //     text: "Basic Polar Chart",
+  //   },
+  //   stroke: {
+  //     colors: ["#fff"],
+  //   },
+  //   fill: {
+  //     opacity: 0.8,
+  //   },
+  //   responsive: [
+  //     {
+  //       breakpoint: 480,
+  //       options: {
+  //         chart: {
+  //           width: 200,
+  //         },
+  //         legend: {
+  //           position: "bottom",
+  //         },
+  //       },
+  //     },
+  //   ],
+  // };
+
+  // const series = [14, 23, 21, 17, 15, 10, 12, 17, 21];
+
   return (
     <ApexChart
       type="polarArea"

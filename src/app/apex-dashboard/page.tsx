@@ -1,11 +1,11 @@
 "use client";
 
-import { CustomAreaChartShadcn } from "@/components/shadcn-chart/AreaChart";
-import { CustomBarChartShadcn } from "@/components/shadcn-chart/BarChart";
-import { CustomLineChartShadcn } from "@/components/shadcn-chart/LineChart";
-import { CustomPieChartShadcn } from "@/components/shadcn-chart/PieChart";
-import { CustomRadarChartShadcn } from "@/components/shadcn-chart/RadarChart";
-import { CustomRadialChartShadcn } from "@/components/shadcn-chart/RadialChart";
+import { CustomAreaChartApex } from "@/components/apex-chart/AreaChart";
+import { CustomBarChartApex } from "@/components/apex-chart/BarChart";
+import { CustomLineChartApex } from "@/components/apex-chart/LineChart";
+// import { CustomPolarChartApex } from "@/components/apex-chart/PolarChart";
+import { CustomRadarChartApex } from "@/components/apex-chart/RadarChart";
+// import { CustomRangeChartApex } from "@/components/apex-chart/RangeChart";
 import { Button } from "@/components/ui/button";
 
 import { Input } from "@/components/ui/input";
@@ -53,9 +53,8 @@ function MainChart() {
 
   useEffect(() => {
     const storedCharts = JSON.parse(
-      localStorage.getItem("charts-shadcn") || "[]",
+      localStorage.getItem("charts-apex") || "[]",
     );
-    // console.log("Loaded charts from localStorage:", storedCharts);
     setSavedCharts(storedCharts);
   }, []);
 
@@ -65,7 +64,6 @@ function MainChart() {
       setData((prev) => [...prev, { x: xValue, y: parsedYValue }]);
       setXValue("");
       setYValue("");
-      // console.log("Data added:", { x: xValue, y: parsedYValue });
     } else {
       alert("Please provide valid X and Y values.");
     }
@@ -89,8 +87,7 @@ function MainChart() {
     };
     const updatedCharts = [...savedCharts, newChart];
     setSavedCharts(updatedCharts);
-    localStorage.setItem("charts-shadcn", JSON.stringify(updatedCharts));
-    // console.log("Chart saved:", newChart);
+    localStorage.setItem("charts-apex", JSON.stringify(updatedCharts));
 
     setData([]);
     setChartTitle("");
@@ -101,7 +98,7 @@ function MainChart() {
   const handleDeleteChart = (index: number) => {
     const updatedCharts = savedCharts.filter((_, i) => i !== index);
     setSavedCharts(updatedCharts);
-    localStorage.setItem("charts-shadcn", JSON.stringify(updatedCharts));
+    localStorage.setItem("charts-apex", JSON.stringify(updatedCharts));
   };
 
   const handleDeleteData = (index: number) => {
@@ -118,21 +115,33 @@ function MainChart() {
     },
     index: number,
   ) => {
+    const chartOptions = {
+      title: {
+        text: chart.title || "Basic Chart Title",
+      },
+      subtitle: {
+        text: chart.desc || "Basic Chart Description",
+      },
+      chart: {
+        id: `apexchart-${index}`,
+      },
+      xaxis: {
+        categories: chart.data.map((d) => d.x),
+      },
+    };
+
+    const chartSeries = [
+      {
+        name: "value",
+        data: chart.data.map((d) => d.y),
+      },
+    ];
+
     switch (chart.type) {
-      case "line-shadcn":
+      case "line-apex":
         return (
           <div key={index} className="border p-4 rounded shadow">
-            <CustomLineChartShadcn
-              chartType="linear"
-              data={chart.data}
-              chartConfig={{
-                y: { label: "Value", color: "hsl(var(--chart-1))" },
-              }}
-              showLegend={true}
-              chartTitle={chart.title}
-              chartDesc={chart.desc}
-              xAxisKey="x"
-            />
+            <CustomLineChartApex options={chartOptions} series={chartSeries} />
             <div className="grid grid-cols-2 gap-2">
               <Button
                 onClick={() => handleDeleteChart(index)}
@@ -140,6 +149,7 @@ function MainChart() {
               >
                 Delete Chart
               </Button>
+
               <Button
                 onClick={() => handleEditChart(index)}
                 className="bg-yellow-500 text-white px-4 py-2 rounded mt-2"
@@ -149,20 +159,10 @@ function MainChart() {
             </div>
           </div>
         );
-      case "bar-shadcn":
+      case "bar-apex":
         return (
           <div key={index} className="border p-4 rounded shadow">
-            <CustomBarChartShadcn
-              data={chart.data}
-              chartConfig={{
-                y: { label: "Value", color: "hsl(var(--chart-1))" },
-              }}
-              layout="horizontal"
-              showLegend={true}
-              axisKey="x"
-              chartTitle={chart.title}
-              chartDesc={chart.desc}
-            />
+            <CustomBarChartApex options={chartOptions} series={chartSeries} />
             <div className="grid grid-cols-2 gap-2">
               <Button
                 onClick={() => handleDeleteChart(index)}
@@ -170,6 +170,7 @@ function MainChart() {
               >
                 Delete Chart
               </Button>
+
               <Button
                 onClick={() => handleEditChart(index)}
                 className="bg-yellow-500 text-white px-4 py-2 rounded mt-2"
@@ -179,27 +180,12 @@ function MainChart() {
             </div>
           </div>
         );
-      case "pie-shadcn":
+      case "polar-apex":
         return (
           <div key={index} className="border p-4 rounded shadow">
-            <CustomPieChartShadcn
-              chartData={chart.data.map(({ x, y }) => ({
-                browser: x,
-                visitors: y,
-                fill: "hsl(var(--chart-1))",
-              }))}
-              chartConfig={{
-                visitors: { label: "Visitors" },
-                x: { label: "X Value" },
-              }}
-              chartType="pie"
-              showLegend={true}
-              showLabel={true}
-              dataKey="y"
-              nameKey="x"
-              chartTitle={chart.title}
-              chartDesc={chart.desc}
-            />
+            {/* CustomPolarChartApex component */}
+            {/* <CustomPolarChartApex options={options} series={series}/> */}
+            <p>Coming Soon!</p>
             <div className="grid grid-cols-2 gap-2">
               <Button
                 onClick={() => handleDeleteChart(index)}
@@ -207,6 +193,7 @@ function MainChart() {
               >
                 Delete Chart
               </Button>
+
               <Button
                 onClick={() => handleEditChart(index)}
                 className="bg-yellow-500 text-white px-4 py-2 rounded mt-2"
@@ -216,20 +203,10 @@ function MainChart() {
             </div>
           </div>
         );
-      case "area-shadcn":
+      case "area-apex":
         return (
           <div key={index} className="border p-4 rounded shadow">
-            <CustomAreaChartShadcn
-              type="natural"
-              data={chart.data}
-              chartConfig={{
-                y: { label: "Value", color: "hsl(var(--chart-1))" },
-              }}
-              showLegend={true}
-              xAxisKey="x"
-              chartTitle={chart.title}
-              chartDesc={chart.desc}
-            />
+            <CustomAreaChartApex options={chartOptions} series={chartSeries} />
             <div className="grid grid-cols-2 gap-2">
               <Button
                 onClick={() => handleDeleteChart(index)}
@@ -237,6 +214,7 @@ function MainChart() {
               >
                 Delete Chart
               </Button>
+
               <Button
                 onClick={() => handleEditChart(index)}
                 className="bg-yellow-500 text-white px-4 py-2 rounded mt-2"
@@ -246,20 +224,10 @@ function MainChart() {
             </div>
           </div>
         );
-      case "radar-shadcn":
+      case "radar-apex":
         return (
           <div key={index} className="border p-4 rounded shadow">
-            <CustomRadarChartShadcn
-              chartData={chart.data}
-              chartConfig={{
-                y: { label: "Value", color: "hsl(var(--chart-1))" },
-              }}
-              showLegend={true}
-              showDots={true}
-              dataKey="x"
-              chartTitle={chart.title}
-              chartDesc={chart.desc}
-            />
+            <CustomRadarChartApex options={chartOptions} series={chartSeries} />
             <div className="grid grid-cols-2 gap-2">
               <Button
                 onClick={() => handleDeleteChart(index)}
@@ -267,6 +235,7 @@ function MainChart() {
               >
                 Delete Chart
               </Button>
+
               <Button
                 onClick={() => handleEditChart(index)}
                 className="bg-yellow-500 text-white px-4 py-2 rounded mt-2"
@@ -276,27 +245,11 @@ function MainChart() {
             </div>
           </div>
         );
-      case "radial-shadcn":
+      case "range-apex":
         return (
           <div key={index} className="border p-4 rounded shadow">
-            <CustomRadialChartShadcn
-              chartData={chart.data.map(({ x, y }, i) => ({
-                name: x,
-                value: y,
-                fill: `hsl(var(--chart-${i + 1}))`,
-              }))}
-              chartConfig={{
-                value: {
-                  label: "Value",
-                  color: `hsl(var(--chart-${index + 1}))`,
-                },
-              }}
-              dataKey="value"
-              nameKey="name"
-              chartTitle={chart.title}
-              chartDesc={chart.desc}
-              showLabels
-            />
+            {/* <CustomRangeChartApex options={options} series={series} /> */}
+            <p>Coming Soon!</p>
             <div className="grid grid-cols-2 gap-2">
               <Button
                 onClick={() => handleDeleteChart(index)}
@@ -350,12 +303,12 @@ function MainChart() {
     updatedCharts[index] = updatedChart;
 
     setSavedCharts(updatedCharts);
-    localStorage.setItem("charts-shadcn", JSON.stringify(updatedCharts));
+    localStorage.setItem("charts-apex", JSON.stringify(updatedCharts));
 
     setData([]);
     setChartTitle("");
     setChartDesc("");
-    setChartType("area-shadcn");
+    setChartType("");
     setEditingChartIndex(null);
     setOpenSheet(false);
   };
@@ -372,7 +325,6 @@ function MainChart() {
   return (
     <div className="grid grid-cols-1 bg-white lg:grid-cols-1 gap-6 p-4">
       <h1 className="text-2xl font-bold">Apex Chart Playground</h1>
-
       <Button onClick={handleSheetOpen}>Add Chart</Button>
 
       <Sheet open={openSheet} onOpenChange={setOpenSheet}>
@@ -423,13 +375,15 @@ function MainChart() {
                     <SelectValue placeholder="Select Chart Type..." />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="area-shadcn">Area Chart</SelectItem>
-                    <SelectItem value="bar-shadcn">Bar Chart</SelectItem>
-                    <SelectItem value="line-shadcn">Line Chart</SelectItem>
-                    <SelectItem value="pie-shadcn">Pie Chart (Bug)</SelectItem>
-                    <SelectItem value="radar-shadcn">Radar Chart</SelectItem>
-                    <SelectItem value="radial-shadcn">
-                      Radial Chart (Bug)
+                    <SelectItem value="area-apex">Area Chart</SelectItem>
+                    <SelectItem value="bar-apex">Bar Chart</SelectItem>
+                    <SelectItem value="line-apex">Line Chart</SelectItem>
+                    <SelectItem value="polar-apex">
+                      Polar Chart (Bug)
+                    </SelectItem>
+                    <SelectItem value="radar-apex">Radar Chart</SelectItem>
+                    <SelectItem value="range-apex">
+                      Range Chart (Bug)
                     </SelectItem>
                   </SelectContent>
                 </Select>
