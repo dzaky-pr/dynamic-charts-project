@@ -1,5 +1,6 @@
 "use client";
 
+import UnstyledLink from "@/components/links/UnstyledLink";
 import { CustomAreaChartShadcn } from "@/components/shadcn-chart/AreaChart";
 import { CustomBarChartShadcn } from "@/components/shadcn-chart/BarChart";
 import { CustomLineChartShadcn } from "@/components/shadcn-chart/LineChart";
@@ -83,160 +84,188 @@ const chartConfig3 = {
 
 function DashboardExamplePage() {
   return (
-    <div className="grid grid-cols-1 bg-white lg:grid-cols-2 gap-6 p-4">
-      {/* Kolom 1 */}
-      <CustomAreaChartShadcn
-        type="natural"
-        data={chartData}
-        chartConfig={chartConfig4}
-        showLegend={true}
-        xAxisKey="month" // Use "month" as xAxisKey
-        chartTitle="Natural Area Chart"
-        chartDesc="Example of natural area chart description"
-      />
-      {/* Kolom 2 */}
-      {/* Example for different data structure */}
-      <CustomAreaChartShadcn
-        type="linear"
-        data={chartData3}
-        chartConfig={chartConfig3}
-        showLegend={true}
-        xAxisKey="hari" // Use "browser" as xAxisKey
-        chartTitle="Linear Area Chart"
-        chartDesc="Example of linear area chart description"
-      />
+    <div className="grid grid-cols-1 bg-white gap-6 p-4">
+      <div className="bg-slate-200 w-full h-fit p-4">
+        <h1 className="text-lg font-bold">
+          More Examples of Shadcn Charts{" "}
+          <UnstyledLink
+            href="https://ui.shadcn.com/charts"
+            openNewTab
+            className="text-blue-500 hover:underline hover:text-blue-800"
+          >
+            click here
+          </UnstyledLink>
+        </h1>
+        <h1 className="text-lg font-bold">
+          Shadcn Charts Docs{" "}
+          <UnstyledLink
+            href="https://ui.shadcn.com/docs/components/chart"
+            openNewTab
+            className="text-blue-500 hover:underline hover:text-blue-800"
+          >
+            click here
+          </UnstyledLink>
+        </h1>
+      </div>
 
-      {/* Kolom 3 */}
-      <CustomAreaChartShadcn
-        type="step"
-        data={chartData}
-        chartConfig={chartConfig}
-        showLegend={true}
-        xAxisKey="month"
-        chartTitle="Step Area Chart"
-        chartDesc="Example of step area chart description"
-      />
+      <div className="grid grid-cols-1 gap-2">
+        <h1 className="text-2xl font-bold">Shadcn Example Charts</h1>
+        <div className="grid grid-cols-1  lg:grid-cols-2 gap-6">
+          {/* Kolom 1 */}
+          <CustomAreaChartShadcn
+            type="natural"
+            data={chartData}
+            chartConfig={chartConfig4}
+            showLegend={true}
+            xAxisKey="month" // Use "month" as xAxisKey
+            chartTitle="Natural Area Chart"
+            chartDesc="Example of natural area chart description"
+          />
+          {/* Kolom 2 */}
+          {/* Example for different data structure */}
+          <CustomAreaChartShadcn
+            type="linear"
+            data={chartData3}
+            chartConfig={chartConfig3}
+            showLegend={true}
+            xAxisKey="hari" // Use "browser" as xAxisKey
+            chartTitle="Linear Area Chart"
+            chartDesc="Example of linear area chart description"
+          />
 
-      {/* Bar Chart - Horizontal */}
-      <CustomBarChartShadcn
-        data={chartData}
-        chartConfig={chartConfig}
-        layout="horizontal"
-        showLegend={true}
-        axisKey="month"
-        chartTitle="Horizontal Bar Chart"
-        chartDesc="Example of horizontal bar chart description"
-      />
-      {/* Bar Chart - Vertical */}
-      <CustomBarChartShadcn
-        data={chartData3}
-        chartConfig={chartConfig3}
-        layout="vertical"
-        showLegend={true}
-        axisKey="hari"
-        chartTitle="Vertical Bar Chart"
-        chartDesc="Example of vertical bar chart description"
-      />
+          {/* Kolom 3 */}
+          <CustomAreaChartShadcn
+            type="step"
+            data={chartData}
+            chartConfig={chartConfig}
+            showLegend={true}
+            xAxisKey="month"
+            chartTitle="Step Area Chart"
+            chartDesc="Example of step area chart description"
+          />
 
-      {/* Kolom 1 */}
-      <CustomLineChartShadcn
-        chartType="natural" // Bisa juga "linear", "step"
-        data={chartData}
-        chartConfig={chartConfig}
-        showLegend={true}
-        chartTitle="Natural Line Chart"
-        chartDesc="Example of natural line chart description"
-        showDots={true}
-        xAxisKey="month"
-      />
+          {/* Bar Chart - Horizontal */}
+          <CustomBarChartShadcn
+            data={chartData}
+            chartConfig={chartConfig}
+            layout="horizontal"
+            showLegend={true}
+            axisKey="month"
+            chartTitle="Horizontal Bar Chart"
+            chartDesc="Example of horizontal bar chart description"
+          />
+          {/* Bar Chart - Vertical */}
+          <CustomBarChartShadcn
+            data={chartData3}
+            chartConfig={chartConfig3}
+            layout="vertical"
+            showLegend={true}
+            axisKey="hari"
+            chartTitle="Vertical Bar Chart"
+            chartDesc="Example of vertical bar chart description"
+          />
 
-      {/* Kolom 2 */}
-      <CustomLineChartShadcn
-        chartType="linear"
-        data={chartData3}
-        chartConfig={chartConfig3}
-        showLegend={true}
-        chartTitle="Linear Line Chart"
-        chartDesc="Example of linear line chart description"
-        showDots={true}
-        xAxisKey="hari"
-      />
+          {/* Kolom 1 */}
+          <CustomLineChartShadcn
+            chartType="natural" // Bisa juga "linear", "step"
+            data={chartData}
+            chartConfig={chartConfig}
+            showLegend={true}
+            chartTitle="Natural Line Chart"
+            chartDesc="Example of natural line chart description"
+            showDots={true}
+            xAxisKey="month"
+          />
 
-      {/* Kolom 3 */}
-      <CustomLineChartShadcn
-        chartType="step"
-        data={chartData}
-        chartConfig={chartConfig}
-        showLegend={true}
-        chartTitle="Step Line Chart"
-        chartDesc="Example of step line chart description"
-        showDots={true}
-        xAxisKey="month"
-      />
+          {/* Kolom 2 */}
+          <CustomLineChartShadcn
+            chartType="linear"
+            data={chartData3}
+            chartConfig={chartConfig3}
+            showLegend={true}
+            chartTitle="Linear Line Chart"
+            chartDesc="Example of linear line chart description"
+            showDots={true}
+            xAxisKey="hari"
+          />
 
-      <CustomPieChartShadcn
-        chartData={chartData2}
-        chartConfig={chartConfig2}
-        chartType="pie"
-        showLegend={true}
-        showLabel={true}
-        dataKey="visitors"
-        nameKey="browser"
-        chartTitle="Pie Chart"
-        chartDesc="Example of pie chart description"
-      />
-      <CustomPieChartShadcn
-        chartData={chartData2}
-        chartConfig={chartConfig2}
-        chartType="donut"
-        showLegend={true}
-        showLabel={true}
-        dataKey="visitors"
-        nameKey="browser"
-        chartTitle="Donut Chart"
-        chartDesc="Example of donut chart description"
-      />
+          {/* Kolom 3 */}
+          <CustomLineChartShadcn
+            chartType="step"
+            data={chartData}
+            chartConfig={chartConfig}
+            showLegend={true}
+            chartTitle="Step Line Chart"
+            chartDesc="Example of step line chart description"
+            showDots={true}
+            xAxisKey="month"
+          />
 
-      {/* Kolom Radar */}
-      <CustomRadarChartShadcn
-        chartData={chartData}
-        chartConfig={chartConfig}
-        showLegend={true}
-        showDots={true}
-        dataKey="month"
-        chartTitle="Radar Chart"
-        chartDesc="Example of radar chart description"
-      />
+          <CustomPieChartShadcn
+            chartData={chartData2}
+            chartConfig={chartConfig2}
+            chartType="pie"
+            showLegend={true}
+            showLabel={true}
+            dataKey="visitors"
+            nameKey="browser"
+            chartTitle="Pie Chart"
+            chartDesc="Example of pie chart description"
+          />
+          <CustomPieChartShadcn
+            chartData={chartData2}
+            chartConfig={chartConfig2}
+            chartType="donut"
+            showLegend={true}
+            showLabel={true}
+            dataKey="visitors"
+            nameKey="browser"
+            chartTitle="Donut Chart"
+            chartDesc="Example of donut chart description"
+          />
 
-      {/* Kolom Radar */}
-      <CustomRadarChartShadcn
-        chartData={chartData3}
-        chartConfig={chartConfig3}
-        showLegend={true}
-        showDots={true}
-        dataKey="hari"
-        chartTitle="Radar Chart"
-        chartDesc="Example of radar chart description"
-      />
+          {/* Kolom Radar */}
+          <CustomRadarChartShadcn
+            chartData={chartData}
+            chartConfig={chartConfig}
+            showLegend={true}
+            showDots={true}
+            dataKey="month"
+            chartTitle="Radar Chart"
+            chartDesc="Example of radar chart description"
+          />
 
-      <CustomRadialChartShadcn
-        chartConfig={chartConfig2}
-        chartData={chartData2}
-        dataKey="visitors"
-        nameKey="browser"
-        chartTitle="Radial Chart"
-        chartDesc="Example of radial chart description"
-      />
+          {/* Kolom Radar */}
+          <CustomRadarChartShadcn
+            chartData={chartData3}
+            chartConfig={chartConfig3}
+            showLegend={true}
+            showDots={true}
+            dataKey="hari"
+            chartTitle="Radar Chart"
+            chartDesc="Example of radar chart description"
+          />
 
-      <CustomRadialChartShadcn
-        chartConfig={chartConfig2}
-        chartData={chartData2}
-        dataKey="visitors"
-        nameKey="browser"
-        chartTitle="Radial Chart with Labels"
-        chartDesc="Example of radial chart with labels description"
-        showLabels
-      />
+          <CustomRadialChartShadcn
+            chartConfig={chartConfig2}
+            chartData={chartData2}
+            dataKey="visitors"
+            nameKey="browser"
+            chartTitle="Radial Chart"
+            chartDesc="Example of radial chart description"
+          />
+
+          <CustomRadialChartShadcn
+            chartConfig={chartConfig2}
+            chartData={chartData2}
+            dataKey="visitors"
+            nameKey="browser"
+            chartTitle="Radial Chart with Labels"
+            chartDesc="Example of radial chart with labels description"
+            showLabels
+          />
+        </div>
+      </div>
     </div>
   );
 }

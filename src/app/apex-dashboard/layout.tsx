@@ -23,13 +23,13 @@ export default function DashboardLayout({
             Back to Home
           </Link>
           <Link
-            href="/shadcn-dashboard"
+            href="/apex-dashboard"
             className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
           >
             Try it!
           </Link>
           <Link
-            href="/shadcn-dashboard/dashboard-example"
+            href="/apex-dashboard/dashboard-example"
             className="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
           >
             Example Charts
@@ -41,7 +41,7 @@ export default function DashboardLayout({
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
         <header className="h-16 bg-white shadow-md flex items-center px-6">
-          <h2 className="text-lg font-semibold text-gray-800">Shadcn Charts</h2>
+          <h2 className="text-lg font-semibold text-gray-800">Apex Charts</h2>
         </header>
 
         {/* Content with Scroll */}
